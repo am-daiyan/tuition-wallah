@@ -214,6 +214,15 @@
   box-shadow: var(--shadow-lift);
 }
 
+@utility shadow-elevated {
+  box-shadow: var(--shadow-lift);
+}
+
+@utility shadow-gold {
+  box-shadow: var(--shadow-gold);
+}
+
+
 @utility eyebrow {
   font-size: 0.72rem;
   font-weight: 700;
