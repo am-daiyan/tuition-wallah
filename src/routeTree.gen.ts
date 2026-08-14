@@ -13,10 +13,12 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as BecomeATeacherRouteImport } from './routes/become-a-teacher'
 import { Route as ContactRouteImport } from './routes/contact'
+import { Route as FindTeacherRouteImport } from './routes/find-teacher'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as PrivacyRouteImport } from './routes/privacy'
 import { Route as RegisterRouteImport } from './routes/register'
 import { Route as TermsRouteImport } from './routes/terms'
+import { Route as TeachersIdRouteImport } from './routes/teachers.$id'
 import { Route as ApiPublicTeacherPhotoSplatRouteImport } from './routes/api/public/teacher-photo/$'
 
 const IndexRoute = IndexRouteImport.update({
@@ -39,6 +41,11 @@ const ContactRoute = ContactRouteImport.update({
   path: '/contact',
   getParentRoute: () => rootRouteImport,
 } as any)
+const FindTeacherRoute = FindTeacherRouteImport.update({
+  id: '/find-teacher',
+  path: '/find-teacher',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const LoginRoute = LoginRouteImport.update({
   id: '/login',
   path: '/login',
@@ -59,6 +66,11 @@ const TermsRoute = TermsRouteImport.update({
   path: '/terms',
   getParentRoute: () => rootRouteImport,
 } as any)
+const TeachersIdRoute = TeachersIdRouteImport.update({
+  id: '/teachers/$id',
+  path: '/teachers/$id',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ApiPublicTeacherPhotoSplatRoute =
   ApiPublicTeacherPhotoSplatRouteImport.update({
     id: '/api/public/teacher-photo/$',
@@ -71,10 +83,12 @@ export interface FileRoutesByFullPath {
   '/about': typeof AboutRoute
   '/become-a-teacher': typeof BecomeATeacherRoute
   '/contact': typeof ContactRoute
+  '/find-teacher': typeof FindTeacherRoute
   '/login': typeof LoginRoute
   '/privacy': typeof PrivacyRoute
   '/register': typeof RegisterRoute
   '/terms': typeof TermsRoute
+  '/teachers/$id': typeof TeachersIdRoute
   '/api/public/teacher-photo/$': typeof ApiPublicTeacherPhotoSplatRoute
 }
 export interface FileRoutesByTo {
@@ -82,10 +96,12 @@ export interface FileRoutesByTo {
   '/about': typeof AboutRoute
   '/become-a-teacher': typeof BecomeATeacherRoute
   '/contact': typeof ContactRoute
+  '/find-teacher': typeof FindTeacherRoute
   '/login': typeof LoginRoute
   '/privacy': typeof PrivacyRoute
   '/register': typeof RegisterRoute
   '/terms': typeof TermsRoute
+  '/teachers/$id': typeof TeachersIdRoute
   '/api/public/teacher-photo/$': typeof ApiPublicTeacherPhotoSplatRoute
 }
 export interface FileRoutesById {
@@ -94,10 +110,12 @@ export interface FileRoutesById {
   '/about': typeof AboutRoute
   '/become-a-teacher': typeof BecomeATeacherRoute
   '/contact': typeof ContactRoute
+  '/find-teacher': typeof FindTeacherRoute
   '/login': typeof LoginRoute
   '/privacy': typeof PrivacyRoute
   '/register': typeof RegisterRoute
   '/terms': typeof TermsRoute
+  '/teachers/$id': typeof TeachersIdRoute
   '/api/public/teacher-photo/$': typeof ApiPublicTeacherPhotoSplatRoute
 }
 export interface FileRouteTypes {
@@ -107,10 +125,12 @@ export interface FileRouteTypes {
     | '/about'
     | '/become-a-teacher'
     | '/contact'
+    | '/find-teacher'
     | '/login'
     | '/privacy'
     | '/register'
     | '/terms'
+    | '/teachers/$id'
     | '/api/public/teacher-photo/$'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -118,10 +138,12 @@ export interface FileRouteTypes {
     | '/about'
     | '/become-a-teacher'
     | '/contact'
+    | '/find-teacher'
     | '/login'
     | '/privacy'
     | '/register'
     | '/terms'
+    | '/teachers/$id'
     | '/api/public/teacher-photo/$'
   id:
     | '__root__'
@@ -129,10 +151,12 @@ export interface FileRouteTypes {
     | '/about'
     | '/become-a-teacher'
     | '/contact'
+    | '/find-teacher'
     | '/login'
     | '/privacy'
     | '/register'
     | '/terms'
+    | '/teachers/$id'
     | '/api/public/teacher-photo/$'
   fileRoutesById: FileRoutesById
 }
@@ -141,10 +165,12 @@ export interface RootRouteChildren {
   AboutRoute: typeof AboutRoute
   BecomeATeacherRoute: typeof BecomeATeacherRoute
   ContactRoute: typeof ContactRoute
+  FindTeacherRoute: typeof FindTeacherRoute
   LoginRoute: typeof LoginRoute
   PrivacyRoute: typeof PrivacyRoute
   RegisterRoute: typeof RegisterRoute
   TermsRoute: typeof TermsRoute
+  TeachersIdRoute: typeof TeachersIdRoute
   ApiPublicTeacherPhotoSplatRoute: typeof ApiPublicTeacherPhotoSplatRoute
 }
 
@@ -178,6 +204,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ContactRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/find-teacher': {
+      id: '/find-teacher'
+      path: '/find-teacher'
+      fullPath: '/find-teacher'
+      preLoaderRoute: typeof FindTeacherRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/login': {
       id: '/login'
       path: '/login'
@@ -206,6 +239,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof TermsRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/teachers/$id': {
+      id: '/teachers/$id'
+      path: '/teachers/$id'
+      fullPath: '/teachers/$id'
+      preLoaderRoute: typeof TeachersIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/public/teacher-photo/$': {
       id: '/api/public/teacher-photo/$'
       path: '/api/public/teacher-photo/$'
@@ -221,10 +261,12 @@ const rootRouteChildren: RootRouteChildren = {
   AboutRoute: AboutRoute,
   BecomeATeacherRoute: BecomeATeacherRoute,
   ContactRoute: ContactRoute,
+  FindTeacherRoute: FindTeacherRoute,
   LoginRoute: LoginRoute,
   PrivacyRoute: PrivacyRoute,
   RegisterRoute: RegisterRoute,
   TermsRoute: TermsRoute,
+  TeachersIdRoute: TeachersIdRoute,
   ApiPublicTeacherPhotoSplatRoute: ApiPublicTeacherPhotoSplatRoute,
 }
 export const routeTree = rootRouteImport
