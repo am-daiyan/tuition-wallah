@@ -13,13 +13,14 @@ export function Field({
   children,
 }: {
   label: string;
-  htmlFor?: string;
-  hint?: string;
-  error?: string;
-  required?: boolean;
-  className?: string;
+  htmlFor?: string | undefined;
+  hint?: string | undefined;
+  error?: string | undefined;
+  required?: boolean | undefined;
+  className?: string | undefined;
   children: ReactNode;
 }) {
+
   return (
     <div className={cn("space-y-2", className)}>
       <Label htmlFor={htmlFor} className="text-sm font-semibold text-foreground">
