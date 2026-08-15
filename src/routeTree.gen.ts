@@ -21,6 +21,8 @@ import { Route as RegisterRouteImport } from './routes/register'
 import { Route as TermsRouteImport } from './routes/terms'
 import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated/dashboard'
 import { Route as AuthenticatedPostRequirementRouteImport } from './routes/_authenticated/post-requirement'
+import { Route as AuthenticatedSupportRouteImport } from './routes/_authenticated/support'
+import { Route as AuthenticatedTeacherRouteImport } from './routes/_authenticated/teacher'
 import { Route as TeachersIdRouteImport } from './routes/teachers.$id'
 import { Route as ApiPublicTeacherPhotoSplatRouteImport } from './routes/api/public/teacher-photo/$'
 
@@ -84,6 +86,16 @@ const AuthenticatedPostRequirementRoute =
     path: '/post-requirement',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
+const AuthenticatedSupportRoute = AuthenticatedSupportRouteImport.update({
+  id: '/support',
+  path: '/support',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedTeacherRoute = AuthenticatedTeacherRouteImport.update({
+  id: '/teacher',
+  path: '/teacher',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
 const TeachersIdRoute = TeachersIdRouteImport.update({
   id: '/teachers/$id',
   path: '/teachers/$id',
@@ -108,6 +120,8 @@ export interface FileRoutesByFullPath {
   '/terms': typeof TermsRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
   '/post-requirement': typeof AuthenticatedPostRequirementRoute
+  '/support': typeof AuthenticatedSupportRoute
+  '/teacher': typeof AuthenticatedTeacherRoute
   '/teachers/$id': typeof TeachersIdRoute
   '/api/public/teacher-photo/$': typeof ApiPublicTeacherPhotoSplatRoute
 }
@@ -123,6 +137,8 @@ export interface FileRoutesByTo {
   '/terms': typeof TermsRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
   '/post-requirement': typeof AuthenticatedPostRequirementRoute
+  '/support': typeof AuthenticatedSupportRoute
+  '/teacher': typeof AuthenticatedTeacherRoute
   '/teachers/$id': typeof TeachersIdRoute
   '/api/public/teacher-photo/$': typeof ApiPublicTeacherPhotoSplatRoute
 }
@@ -140,6 +156,8 @@ export interface FileRoutesById {
   '/terms': typeof TermsRoute
   '/_authenticated/dashboard': typeof AuthenticatedDashboardRoute
   '/_authenticated/post-requirement': typeof AuthenticatedPostRequirementRoute
+  '/_authenticated/support': typeof AuthenticatedSupportRoute
+  '/_authenticated/teacher': typeof AuthenticatedTeacherRoute
   '/teachers/$id': typeof TeachersIdRoute
   '/api/public/teacher-photo/$': typeof ApiPublicTeacherPhotoSplatRoute
 }
@@ -157,6 +175,8 @@ export interface FileRouteTypes {
     | '/terms'
     | '/dashboard'
     | '/post-requirement'
+    | '/support'
+    | '/teacher'
     | '/teachers/$id'
     | '/api/public/teacher-photo/$'
   fileRoutesByTo: FileRoutesByTo
@@ -172,6 +192,8 @@ export interface FileRouteTypes {
     | '/terms'
     | '/dashboard'
     | '/post-requirement'
+    | '/support'
+    | '/teacher'
     | '/teachers/$id'
     | '/api/public/teacher-photo/$'
   id:
@@ -188,6 +210,8 @@ export interface FileRouteTypes {
     | '/terms'
     | '/_authenticated/dashboard'
     | '/_authenticated/post-requirement'
+    | '/_authenticated/support'
+    | '/_authenticated/teacher'
     | '/teachers/$id'
     | '/api/public/teacher-photo/$'
   fileRoutesById: FileRoutesById
@@ -293,6 +317,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedPostRequirementRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/support': {
+      id: '/_authenticated/support'
+      path: '/support'
+      fullPath: '/support'
+      preLoaderRoute: typeof AuthenticatedSupportRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/teacher': {
+      id: '/_authenticated/teacher'
+      path: '/teacher'
+      fullPath: '/teacher'
+      preLoaderRoute: typeof AuthenticatedTeacherRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/teachers/$id': {
       id: '/teachers/$id'
       path: '/teachers/$id'
@@ -313,11 +351,15 @@ declare module '@tanstack/react-router' {
 interface AuthenticatedRouteRouteChildren {
   AuthenticatedDashboardRoute: typeof AuthenticatedDashboardRoute
   AuthenticatedPostRequirementRoute: typeof AuthenticatedPostRequirementRoute
+  AuthenticatedSupportRoute: typeof AuthenticatedSupportRoute
+  AuthenticatedTeacherRoute: typeof AuthenticatedTeacherRoute
 }
 
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedDashboardRoute: AuthenticatedDashboardRoute,
   AuthenticatedPostRequirementRoute: AuthenticatedPostRequirementRoute,
+  AuthenticatedSupportRoute: AuthenticatedSupportRoute,
+  AuthenticatedTeacherRoute: AuthenticatedTeacherRoute,
 }
 
 const AuthenticatedRouteRouteWithChildren =
