@@ -142,7 +142,7 @@ function TeacherProfilePage() {
         .eq("id", id)
         .maybeSingle();
       if (error) throw error;
-      return data;
+      return data as PublicTeacher | null;
     },
   });
 
