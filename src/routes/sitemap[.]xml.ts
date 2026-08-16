@@ -27,9 +27,8 @@ export const Route = createFileRoute("/sitemap.xml")({
         ];
 
         const { data: teachers } = await supabase
-          .from("teachers")
-          .select("id")
-          .eq("status", "approved");
+          .from("teachers_public")
+          .select("id");
 
         for (const t of teachers ?? []) {
           entries.push({ path: `/teachers/${t.id}`, changefreq: "weekly", priority: "0.7" });

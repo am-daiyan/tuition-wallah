@@ -20,10 +20,9 @@ import { BRAND, teacherPhotoUrl } from "@/lib/brand";
 export const Route = createFileRoute("/teachers/$id")({
   loader: async ({ params }) => {
     const { data } = await supabase
-      .from("teachers")
+      .from("teachers_public")
       .select("full_name, qualification, subjects, location, experience_years, rating, review_count")
       .eq("id", params.id)
-      .eq("status", "approved")
       .maybeSingle();
     const { data: reviews } = await supabase
       .from("reviews")
@@ -138,10 +137,9 @@ function TeacherProfilePage() {
     queryKey: ["teacher", id],
     queryFn: async () => {
       const { data, error } = await supabase
-        .from("teachers")
+        .from("teachers_public")
         .select("*")
         .eq("id", id)
-        .eq("status", "approved")
         .maybeSingle();
       if (error) throw error;
       return data;
