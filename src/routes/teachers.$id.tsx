@@ -77,6 +77,21 @@ export const Route = createFileRoute("/teachers/$id")({
           }
         : {};
 
+    const reviewList = (loaderData?.seoReviews ?? []).filter((r) => r.rating != null);
+    const reviewBlock =
+      reviewList.length > 0
+        ? {
+            review: reviewList.map((r) => ({
+              "@type": "Review",
+              reviewRating: { "@type": "Rating", ratingValue: r.rating, bestRating: 5, worstRating: 1 },
+              author: { "@type": "Person", name: r.author_name || "Student" },
+              ...(r.comment ? { reviewBody: r.comment } : {}),
+              ...(r.created_at ? { datePublished: String(r.created_at).slice(0, 10) } : {}),
+            })),
+          }
+        : {};
+
+
     return {
       meta: [
         { title },
@@ -105,6 +120,8 @@ export const Route = createFileRoute("/teachers/$id")({
             ...(t.location ? { address: { "@type": "PostalAddress", addressLocality: t.location } } : {}),
             worksFor: { "@type": "Organization", name: "Tuition Wallah" },
             ...ratingBlock,
+            ...reviewBlock,
+
           }),
         },
       ],
