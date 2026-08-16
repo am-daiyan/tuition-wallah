@@ -17,6 +17,27 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { supabase } from "@/integrations/supabase/client";
 import { BRAND, teacherPhotoUrl } from "@/lib/brand";
 
+type PublicTeacher = {
+  id: string;
+  full_name: string;
+  qualification: string;
+  experience_years: number;
+  subjects: string[];
+  classes: string[];
+  boards: string[];
+  location: string;
+  teaching_modes: string[];
+  available_days: string[];
+  available_from: string | null;
+  available_to: string | null;
+  bio: string | null;
+  photo_path: string | null;
+  verified: boolean;
+  rating: number;
+  review_count: number;
+  created_at: string;
+};
+
 export const Route = createFileRoute("/teachers/$id")({
   loader: async ({ params }) => {
     const { data } = await supabase

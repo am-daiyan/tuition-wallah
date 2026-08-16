@@ -20,7 +20,7 @@ import {
 
 import { SiteFooter } from "@/components/layout/SiteFooter";
 import { SiteHeader } from "@/components/layout/SiteHeader";
-import { TeacherCard } from "@/components/teachers/TeacherCard";
+import { TeacherCard, type TeacherCardData } from "@/components/teachers/TeacherCard";
 import { Button } from "@/components/ui/button";
 import { supabase } from "@/integrations/supabase/client";
 import { BRAND, BOARDS, CLASSES, SUBJECTS } from "@/lib/brand";
