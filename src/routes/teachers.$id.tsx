@@ -25,8 +25,16 @@ export const Route = createFileRoute("/teachers/$id")({
       .eq("id", params.id)
       .eq("status", "approved")
       .maybeSingle();
-    return { seo: data };
+    const { data: reviews } = await supabase
+      .from("reviews")
+      .select("rating, comment, author_name, created_at")
+      .eq("teacher_id", params.id)
+      .eq("hidden", false)
+      .order("created_at", { ascending: false })
+      .limit(5);
+    return { seo: data, seoReviews: reviews ?? [] };
   },
+
   head: ({ params, loaderData }) => {
     const t = loaderData?.seo;
     const url = `https://tuition-wallah.lovable.app/teachers/${params.id}`;
