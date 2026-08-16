@@ -12,3 +12,6 @@ Allow: /
 
 User-agent: *
 Allow: /
+
+Sitemap: https://tuition-wallah.lovable.app/sitemap.xml
+
