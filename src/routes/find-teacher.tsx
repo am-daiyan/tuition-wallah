@@ -48,11 +48,10 @@ function FindTeacherPage() {
     queryKey: ["approved-teachers"],
     queryFn: async () => {
       const { data, error } = await supabase
-        .from("teachers")
+        .from("teachers_public")
         .select(
           "id, full_name, qualification, experience_years, subjects, classes, boards, location, teaching_modes, photo_path, rating, review_count, verified",
         )
-        .eq("status", "approved")
         .order("rating", { ascending: false })
         .limit(200);
       if (error) throw error;

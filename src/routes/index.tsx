@@ -20,7 +20,7 @@ import {
 
 import { SiteFooter } from "@/components/layout/SiteFooter";
 import { SiteHeader } from "@/components/layout/SiteHeader";
-import { TeacherCard } from "@/components/teachers/TeacherCard";
+import { TeacherCard, type TeacherCardData } from "@/components/teachers/TeacherCard";
 import { Button } from "@/components/ui/button";
 import { supabase } from "@/integrations/supabase/client";
 import { BRAND, BOARDS, CLASSES, SUBJECTS } from "@/lib/brand";
@@ -52,15 +52,14 @@ function HomePage() {
     queryKey: ["featured-teachers"],
     queryFn: async () => {
       const { data, error } = await supabase
-        .from("teachers")
+        .from("teachers_public")
         .select(
           "id, full_name, qualification, experience_years, subjects, classes, boards, location, teaching_modes, photo_path, rating, review_count, verified",
         )
-        .eq("status", "approved")
         .order("rating", { ascending: false })
         .limit(6);
       if (error) throw error;
-      return data ?? [];
+      return (data ?? []) as TeacherCardData[];
     },
   });
 

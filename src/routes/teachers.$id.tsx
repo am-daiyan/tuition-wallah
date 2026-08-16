@@ -17,13 +17,33 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { supabase } from "@/integrations/supabase/client";
 import { BRAND, teacherPhotoUrl } from "@/lib/brand";
 
+type PublicTeacher = {
+  id: string;
+  full_name: string;
+  qualification: string;
+  experience_years: number;
+  subjects: string[];
+  classes: string[];
+  boards: string[];
+  location: string;
+  teaching_modes: string[];
+  available_days: string[];
+  available_from: string | null;
+  available_to: string | null;
+  bio: string | null;
+  photo_path: string | null;
+  verified: boolean;
+  rating: number;
+  review_count: number;
+  created_at: string;
+};
+
 export const Route = createFileRoute("/teachers/$id")({
   loader: async ({ params }) => {
     const { data } = await supabase
-      .from("teachers")
+      .from("teachers_public")
       .select("full_name, qualification, subjects, location, experience_years, rating, review_count")
       .eq("id", params.id)
-      .eq("status", "approved")
       .maybeSingle();
     const { data: reviews } = await supabase
       .from("reviews")
@@ -138,13 +158,12 @@ function TeacherProfilePage() {
     queryKey: ["teacher", id],
     queryFn: async () => {
       const { data, error } = await supabase
-        .from("teachers")
+        .from("teachers_public")
         .select("*")
         .eq("id", id)
-        .eq("status", "approved")
         .maybeSingle();
       if (error) throw error;
-      return data;
+      return data as PublicTeacher | null;
     },
   });
 
