@@ -76,9 +76,10 @@ function LoginPage() {
         <Logo tone="inverted" />
         <div>
           <p className="eyebrow text-gold">Welcome back</p>
-          <h1 className="mt-3 text-4xl font-extrabold text-ink-foreground">
+          <p className="mt-3 font-display text-4xl font-extrabold text-ink-foreground">
             Your tuition, organised in one place.
-          </h1>
+          </p>
+
           <p className="mt-4 max-w-md text-ink-muted">
             Track your assigned teacher, class schedule, requests and complaints — and ask for a
             replacement teacher whenever you need one.
@@ -94,7 +95,7 @@ function LoginPage() {
           <div className="lg:hidden">
             <Logo />
           </div>
-          <h2 className="mt-8 font-display text-3xl font-extrabold">Login</h2>
+          <h1 className="mt-8 font-display text-3xl font-extrabold">Login to Tuition Wallah</h1>
           <p className="mt-2 text-sm text-muted-foreground">
             Use the mobile number you registered with.
           </p>

@@ -18,23 +18,118 @@ import { supabase } from "@/integrations/supabase/client";
 import { BRAND, teacherPhotoUrl } from "@/lib/brand";
 
 export const Route = createFileRoute("/teachers/$id")({
-  head: () => ({
-    meta: [
-      { title: "Teacher Profile — Tuition Wallah" },
-      {
-        name: "description",
-        content:
-          "View a verified Tuition Wallah tutor's qualification, subjects, classes, availability and student reviews.",
-      },
-      { property: "og:title", content: "Teacher Profile — Tuition Wallah" },
-      {
-        property: "og:description",
-        content: "Verified home tutor profile with subjects, experience and reviews.",
-      },
-    ],
-  }),
+  loader: async ({ params }) => {
+    const { data } = await supabase
+      .from("teachers")
+      .select("full_name, qualification, subjects, location, experience_years, rating, review_count")
+      .eq("id", params.id)
+      .eq("status", "approved")
+      .maybeSingle();
+    const { data: reviews } = await supabase
+      .from("reviews")
+      .select("rating, comment, author_name, created_at")
+      .eq("teacher_id", params.id)
+      .eq("hidden", false)
+      .order("created_at", { ascending: false })
+      .limit(5);
+    return { seo: data, seoReviews: reviews ?? [] };
+  },
+
+  head: ({ params, loaderData }) => {
+    const t = loaderData?.seo;
+    const url = `https://tuition-wallah.lovable.app/teachers/${params.id}`;
+    if (!t) {
+      const title = "Teacher Profile — Tuition Wallah";
+      const description =
+        "View a verified Tuition Wallah tutor's qualification, subjects, classes, availability and student reviews.";
+      return {
+        meta: [
+          { title },
+          { name: "description", content: description },
+          { property: "og:title", content: title },
+          { property: "og:description", content: description },
+          { property: "og:type", content: "profile" },
+          { property: "og:url", content: url },
+          { name: "twitter:card", content: "summary" },
+        ],
+        links: [{ rel: "canonical", href: url }],
+      };
+    }
+    const subjects = (t.subjects ?? []).slice(0, 3).join(", ");
+    const place = t.location ? ` in ${t.location}` : "";
+    const title = `${t.full_name} — ${subjects || "Home"} Tutor${place} | Tuition Wallah`;
+    const description = `${t.full_name}, ${t.qualification ?? "verified tutor"} with ${
+      t.experience_years ?? 0
+    } years of experience${place}. Teaches ${subjects || "multiple subjects"}. Rated ${
+      t.rating ?? 0
+    }/5 from ${t.review_count ?? 0} student reviews.`;
+
+    const ratingBlock =
+      (t.review_count ?? 0) > 0
+        ? {
+            aggregateRating: {
+              "@type": "AggregateRating",
+              ratingValue: t.rating,
+              reviewCount: t.review_count,
+              bestRating: 5,
+              worstRating: 1,
+            },
+          }
+        : {};
+
+    const reviewList = (loaderData?.seoReviews ?? []).filter((r) => r.rating != null);
+    const reviewBlock =
+      reviewList.length > 0
+        ? {
+            review: reviewList.map((r) => ({
+              "@type": "Review",
+              reviewRating: { "@type": "Rating", ratingValue: r.rating, bestRating: 5, worstRating: 1 },
+              author: { "@type": "Person", name: r.author_name || "Student" },
+              ...(r.comment ? { reviewBody: r.comment } : {}),
+              ...(r.created_at ? { datePublished: String(r.created_at).slice(0, 10) } : {}),
+            })),
+          }
+        : {};
+
+
+    return {
+      meta: [
+        { title },
+        { name: "description", content: description },
+        { property: "og:title", content: title },
+        { property: "og:description", content: description },
+        { property: "og:type", content: "profile" },
+        { property: "og:url", content: url },
+        { name: "twitter:card", content: "summary" },
+      ],
+      links: [{ rel: "canonical", href: url }],
+      scripts: [
+        {
+          type: "application/ld+json",
+          children: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "Person",
+            name: t.full_name,
+            jobTitle: "Home Tuition Teacher",
+            description,
+            url,
+            knowsAbout: t.subjects ?? [],
+            ...(t.qualification
+              ? { hasCredential: { "@type": "EducationalOccupationalCredential", name: t.qualification } }
+              : {}),
+            ...(t.location ? { address: { "@type": "PostalAddress", addressLocality: t.location } } : {}),
+            worksFor: { "@type": "Organization", name: "Tuition Wallah" },
+            ...ratingBlock,
+            ...reviewBlock,
+
+          }),
+        },
+      ],
+    };
+  },
   component: TeacherProfilePage,
 });
+
 
 function TeacherProfilePage() {
   const { id } = Route.useParams();
