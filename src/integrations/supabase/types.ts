@@ -99,6 +99,13 @@ export type Database = {
             referencedRelation: "teachers"
             referencedColumns: ["id"]
           },
+          {
+            foreignKeyName: "complaints_teacher_id_fkey"
+            columns: ["teacher_id"]
+            isOneToOne: false
+            referencedRelation: "teachers_public"
+            referencedColumns: ["id"]
+          },
         ]
       }
       profiles: {
@@ -187,10 +194,24 @@ export type Database = {
             referencedColumns: ["id"]
           },
           {
+            foreignKeyName: "replacement_requests_current_teacher_id_fkey"
+            columns: ["current_teacher_id"]
+            isOneToOne: false
+            referencedRelation: "teachers_public"
+            referencedColumns: ["id"]
+          },
+          {
             foreignKeyName: "replacement_requests_new_teacher_id_fkey"
             columns: ["new_teacher_id"]
             isOneToOne: false
             referencedRelation: "teachers"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "replacement_requests_new_teacher_id_fkey"
+            columns: ["new_teacher_id"]
+            isOneToOne: false
+            referencedRelation: "teachers_public"
             referencedColumns: ["id"]
           },
           {
@@ -246,6 +267,13 @@ export type Database = {
             columns: ["teacher_id"]
             isOneToOne: false
             referencedRelation: "teachers"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "reviews_teacher_id_fkey"
+            columns: ["teacher_id"]
+            isOneToOne: false
+            referencedRelation: "teachers_public"
             referencedColumns: ["id"]
           },
         ]
@@ -457,6 +485,13 @@ export type Database = {
             referencedRelation: "teachers"
             referencedColumns: ["id"]
           },
+          {
+            foreignKeyName: "tuition_assignments_teacher_id_fkey"
+            columns: ["teacher_id"]
+            isOneToOne: false
+            referencedRelation: "teachers_public"
+            referencedColumns: ["id"]
+          },
         ]
       }
       tuition_requests: {
@@ -520,6 +555,13 @@ export type Database = {
             referencedColumns: ["id"]
           },
           {
+            foreignKeyName: "tuition_requests_preferred_teacher_id_fkey"
+            columns: ["preferred_teacher_id"]
+            isOneToOne: false
+            referencedRelation: "teachers_public"
+            referencedColumns: ["id"]
+          },
+          {
             foreignKeyName: "tuition_requests_student_id_fkey"
             columns: ["student_id"]
             isOneToOne: false
@@ -551,16 +593,72 @@ export type Database = {
       }
     }
     Views: {
-      [_ in never]: never
+      teachers_public: {
+        Row: {
+          available_days: string[] | null
+          available_from: string | null
+          available_to: string | null
+          bio: string | null
+          boards: string[] | null
+          classes: string[] | null
+          created_at: string | null
+          experience_years: number | null
+          full_name: string | null
+          id: string | null
+          location: string | null
+          photo_path: string | null
+          qualification: string | null
+          rating: number | null
+          review_count: number | null
+          subjects: string[] | null
+          teaching_modes: string[] | null
+          verified: boolean | null
+        }
+        Insert: {
+          available_days?: string[] | null
+          available_from?: string | null
+          available_to?: string | null
+          bio?: string | null
+          boards?: string[] | null
+          classes?: string[] | null
+          created_at?: string | null
+          experience_years?: number | null
+          full_name?: string | null
+          id?: string | null
+          location?: string | null
+          photo_path?: string | null
+          qualification?: string | null
+          rating?: number | null
+          review_count?: number | null
+          subjects?: string[] | null
+          teaching_modes?: string[] | null
+          verified?: boolean | null
+        }
+        Update: {
+          available_days?: string[] | null
+          available_from?: string | null
+          available_to?: string | null
+          bio?: string | null
+          boards?: string[] | null
+          classes?: string[] | null
+          created_at?: string | null
+          experience_years?: number | null
+          full_name?: string | null
+          id?: string | null
+          location?: string | null
+          photo_path?: string | null
+          qualification?: string | null
+          rating?: number | null
+          review_count?: number | null
+          subjects?: string[] | null
+          teaching_modes?: string[] | null
+          verified?: boolean | null
+        }
+        Relationships: []
+      }
     }
     Functions: {
-      has_role: {
-        Args: {
-          _role: Database["public"]["Enums"]["app_role"]
-          _user_id: string
-        }
-        Returns: boolean
-      }
+      [_ in never]: never
     }
     Enums: {
       app_role: "admin" | "teacher" | "student"
