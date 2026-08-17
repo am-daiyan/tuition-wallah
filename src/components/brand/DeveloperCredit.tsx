@@ -1,7 +1,7 @@
 import { Linkedin, Mail, MessageCircle, Phone, Sparkles, X } from "lucide-react";
 import { useState } from "react";
 
-import { Dialog, DialogContent, DialogDescription, DialogTitle } from "@/components/ui/dialog";
+import * as DialogPrimitive from "@radix-ui/react-dialog";
 
 const DEV = {
   name: "Daiyan Ali Abbas",
@@ -36,15 +36,14 @@ export function DeveloperCredit() {
         </span>
       </button>
 
-      <Dialog open={open} onOpenChange={setOpen}>
-        <DialogContent
-          showCloseButton={false}
-          className="w-[calc(100vw-2rem)] max-w-md overflow-hidden rounded-3xl border-white/10 bg-[#0c1830] p-0 text-ink-foreground shadow-2xl sm:max-w-md"
-        >
-          <DialogTitle className="sr-only">{DEV.name} — Developer profile</DialogTitle>
-          <DialogDescription className="sr-only">
+      <DialogPrimitive.Root open={open} onOpenChange={setOpen}>
+        <DialogPrimitive.Portal>
+          <DialogPrimitive.Overlay className="fixed inset-0 z-50 bg-[#050b18]/80 backdrop-blur-md duration-300 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0" />
+          <DialogPrimitive.Content className="fixed top-1/2 left-1/2 z-50 w-[calc(100vw-2rem)] max-w-md -translate-x-1/2 -translate-y-1/2 overflow-hidden rounded-3xl border border-white/10 bg-[#0c1830] text-ink-foreground shadow-2xl duration-300 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[state=closed]:slide-out-to-bottom-2 data-[state=open]:slide-in-from-bottom-2">
+          <DialogPrimitive.Title className="sr-only">{DEV.name} — Developer profile</DialogPrimitive.Title>
+          <DialogPrimitive.Description className="sr-only">
             Contact details for the designer and developer of this website.
-          </DialogDescription>
+          </DialogPrimitive.Description>
 
           {/* Ambient gold glow */}
           <div
@@ -116,8 +115,9 @@ export function DeveloperCredit() {
               Crafted with precision · 2026
             </p>
           </div>
-        </DialogContent>
-      </Dialog>
+          </DialogPrimitive.Content>
+        </DialogPrimitive.Portal>
+      </DialogPrimitive.Root>
     </>
   );
 }
