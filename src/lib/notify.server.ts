@@ -58,7 +58,11 @@ function escapeHtml(value: string): string {
 export async function notifyAdmin(input: NotifyInput): Promise<{ status: string }> {
   const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
 
-  const recipient = process.env["ADMIN_EMAIL"] ?? null;
+  const recipients = (process.env["ADMIN_EMAIL"] ?? "")
+    .split(",")
+    .map((value) => value.trim())
+    .filter(Boolean);
+  const recipient = recipients.join(", ") || null;
   const apiKey = process.env["RESEND_API_KEY"] ?? null;
   const from = process.env["EMAIL_FROM"] ?? "Tuition Wallah <onboarding@resend.dev>";
   const body = renderBody(input.subject, input.lines);
@@ -66,32 +70,40 @@ export async function notifyAdmin(input: NotifyInput): Promise<{ status: string 
   let status = "recorded";
   let error: string | null = null;
 
-  if (recipient && apiKey) {
-    try {
-      const res = await fetch("https://api.resend.com/emails", {
-        method: "POST",
-        headers: {
-          Authorization: `Bearer ${apiKey}`,
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          from,
-          to: [recipient],
-          subject: `[Tuition Wallah] ${input.subject}`,
-          text: body,
-          html: renderHtml(input.subject, input.lines),
-        }),
-      });
-      if (res.ok) {
-        status = "sent";
-      } else {
-        status = "failed";
-        error = `Email provider responded ${res.status}`;
+  if (recipients.length > 0 && apiKey) {
+    const failures: string[] = [];
+    let delivered = 0;
+
+    // Sent one recipient at a time so a single rejected address (e.g. an
+    // unverified inbox in the provider's test mode) cannot block the others.
+    for (const to of recipients) {
+      try {
+        const res = await fetch("https://api.resend.com/emails", {
+          method: "POST",
+          headers: {
+            Authorization: `Bearer ${apiKey}`,
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            from,
+            to: [to],
+            subject: `[Tuition Wallah] ${input.subject}`,
+            text: body,
+            html: renderHtml(input.subject, input.lines),
+          }),
+        });
+        if (res.ok) {
+          delivered += 1;
+        } else {
+          failures.push(`${to}: provider responded ${res.status}`);
+        }
+      } catch (err) {
+        failures.push(`${to}: ${err instanceof Error ? err.message : "unknown email error"}`);
       }
-    } catch (err) {
-      status = "failed";
-      error = err instanceof Error ? err.message : "Unknown email error";
     }
+
+    status = delivered > 0 ? (failures.length > 0 ? "partial" : "sent") : "failed";
+    error = failures.length > 0 ? failures.join("; ") : null;
   } else {
     status = "recorded";
     error = "Email delivery not configured (ADMIN_EMAIL / RESEND_API_KEY missing)";
