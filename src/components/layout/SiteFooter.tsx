@@ -2,6 +2,7 @@ import { Link } from "@tanstack/react-router";
 import { Facebook, Instagram, MapPin, MessageCircle, Phone, Youtube } from "lucide-react";
 
 import { LogoMark } from "@/components/brand/Logo";
+import { DeveloperCredit } from "@/components/brand/DeveloperCredit";
 import { BRAND } from "@/lib/brand";
 
 const SOCIALS = [
@@ -114,6 +115,12 @@ export function SiteFooter() {
           <p className="text-xs text-ink-muted">
             © {new Date().getFullYear()} {BRAND.nameUpper}. All rights reserved.
           </p>
+        </div>
+      </div>
+
+      <div className="border-t border-white/10">
+        <div className="container-page flex justify-center py-5">
+          <DeveloperCredit />
         </div>
       </div>
     </footer>
